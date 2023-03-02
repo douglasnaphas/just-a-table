@@ -1,0 +1,59 @@
+name: Destroy
+concurrency: ci-${{ github.ref }}
+
+on:
+  workflow_dispatch:
+
+jobs:
+  destroy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          persist-credentials: false
+
+      - name: Install
+        run: |
+          npm install
+
+      - name: Build
+        run: |
+          npm run build
+
+      - name: Identify test account and region
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TEST_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TEST_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "us-east-1"
+        run: |
+          aws sts get-caller-identity
+          echo ${AWS_DEFAULT_REGION} | sed 's/-/+/g'
+
+      - name: Destroy (test account)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.TEST_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.TEST_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "us-east-1"
+        run: |
+          STACKNAME=$(npx @cdk-turnkey/stackname@1.2.0 --suffix app)
+          npx cdk destroy --force --app 'npx ts-node bin/index.ts' ${STACKNAME}
+      
+      - name: Identify prod account and region
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "us-east-1"
+        run: |
+          aws sts get-caller-identity
+          echo ${AWS_DEFAULT_REGION} | sed 's/-/+/g'
+
+      - name: Destroy (prod account)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.PROD_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.PROD_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "us-east-1"
+        run: |
+          STACKNAME=$(npx @cdk-turnkey/stackname@1.2.0 --suffix app)
+          npx cdk destroy --force --app 'npx ts-node bin/index.ts' ${STACKNAME}

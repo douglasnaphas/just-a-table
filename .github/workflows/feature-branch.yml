@@ -1,0 +1,90 @@
+# This is a basic workflow to help you get started with Actions
+
+name: CI-feature-branch
+concurrency: ci-${{ github.ref }}
+
+# Controls when the action will run.
+on:
+  # Triggers the workflow on push to feature branches
+  push:
+    branches: ["*", "!main", "!master", "!skip/*"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+          persist-credentials: false
+
+      - name: Install
+        run: |
+          npm install
+
+      - name: Build
+        run: |
+          npm run build
+
+      - name: Test
+        run: |
+          npm test
+
+      - name: Identify dev account and region
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "us-east-1"
+        run: |
+          aws sts get-caller-identity
+          echo ${AWS_DEFAULT_REGION} | sed 's/-/+/g'
+
+      - name: cdk version
+        run: |
+          npx aws-cdk --version
+          npx aws-cdk@latest --version
+          npx aws-cdk@2.9.0 --version
+          ls ~/.npm/_npx
+          node --version
+          npm --version
+          npx --version
+          npx cdk --version
+          npx cdk@latest --version
+          npx cdk@2.8.0 --version
+
+      - name: Deploy the app stack to dev account
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "us-east-1"
+        run: |
+          npx cdk bootstrap
+          STACKNAME=$(npx @cdk-turnkey/stackname@1.2.0 --suffix app)
+          npx cdk deploy --require-approval never ${STACKNAME}
+
+      - name: Deploy content (dev account)
+        working-directory: content
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "us-east-1"
+        run: |
+          bash deploy-content.sh
+
+      - name: Run integration test (dev account)
+        working-directory: itest
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.DEV_AWS_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "us-east-1"
+        run: |
+          bash itest.sh

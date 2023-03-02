@@ -1,0 +1,33 @@
+{
+  "name": "just-a-bucket",
+  "version": "0.1.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/cdk-turnkey/just-a-bucket"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc -w",
+    "test": "jest",
+    "synth": "npx cdk synth --no-staging",
+    "diff": "npx cdk diff",
+    "init-submods": "git submodule update --init --recursive"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.10",
+    "@types/node": "^14.17.2",
+    "aws-cdk": "^2.10.0",
+    "jest": "^26.4.2",
+    "ts-jest": "^26.5.3",
+    "ts-node": "^8.1.0",
+    "typescript": "~3.9.7"
+  },
+  "dependencies": {
+    "@cdk-turnkey/stackname": "^1.2.0",
+    "aws-cdk-lib": "^2.10.0",
+    "aws-sdk": "^2.850.0",
+    "bufferutil": "^4.0.3",
+    "utf-8-validate": "^5.0.5"
+  }
+}
