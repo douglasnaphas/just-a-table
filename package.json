@@ -17,7 +17,7 @@
   "devDependencies": {
     "@types/jest": "^26.0.10",
     "@types/node": "^14.17.2",
-    "aws-cdk": "^2.10.0",
+    "aws-cdk": "^2.67.0",
     "jest": "^26.4.2",
     "ts-jest": "^26.5.3",
     "ts-node": "^8.1.0",
