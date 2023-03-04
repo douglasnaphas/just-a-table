@@ -24,7 +24,7 @@
     "typescript": "~3.9.7"
   },
   "dependencies": {
-    "@cdk-turnkey/stackname": "^1.2.0",
+    "@cdk-turnkey/stackname": "^2.1.0",
     "aws-cdk-lib": "^2.10.0",
     "aws-sdk": "^2.850.0",
     "bufferutil": "^4.0.3",

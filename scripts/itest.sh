@@ -2,7 +2,7 @@
 
 set -e
 
-STACKNAME=$(npx @cdk-turnkey/stackname@1.2.0 --suffix webapp)
+STACKNAME=$(npx @cdk-turnkey/stackname@2.1.0 --suffix webapp --hash 6)
 APP_URL=https://$(aws cloudformation describe-stacks \
   --stack-name ${STACKNAME} | \
   jq '.Stacks[0].Outputs | map(select(.OutputKey == "webappDomainName"))[0].OutputValue' | \

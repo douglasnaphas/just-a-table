@@ -4,12 +4,14 @@ const AWS = require("aws-sdk");
 const crypto = require("crypto");
 import { AppStack, AppStackProps } from "../lib";
 const stackname = require("@cdk-turnkey/stackname");
+const STACKNAME_HASH_LENGTH = 6;
 
 (async () => {
   const app = new App();
   class ConfigParam {
     appParamName: string;
-    ssmParamName = () => stackname(this.appParamName);
+    ssmParamName = () =>
+      stackname(this.appParamName, { hash: STACKNAME_HASH_LENGTH });
     ssmParamValue?: string;
     print = () => {
       console.log("appParamName");
@@ -71,7 +73,7 @@ const stackname = require("@cdk-turnkey/stackname");
     // Validate the customProp, if provided
   }
   // TODO: print a hash of the IDP app secrets
-  new AppStack(app, stackname("app"), {
+  new AppStack(app, stackname("app", { hash: STACKNAME_HASH_LENGTH }), {
     ...(appProps as AppStackProps),
   });
 })();
