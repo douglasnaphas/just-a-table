@@ -1,6 +1,7 @@
 import { App, Stack, StackProps, RemovalPolicy, CfnOutput } from "aws-cdk-lib";
 import { aws_s3 as s3 } from "aws-cdk-lib";
 import { aws_dynamodb as dynamodb } from "aws-cdk-lib";
+const appTable = require("./appTable");
 
 export interface AppStackProps extends StackProps {
   customProp?: string;
@@ -20,18 +21,6 @@ export class AppStack extends Stack {
     new CfnOutput(this, "BucketName", {
       value: bucket.bucketName,
     });
-    const table = new dynamodb.Table(this, "Table", {
-      partitionKey: { name: "PK", type: dynamodb.AttributeType.STRING },
-      sortKey: { name: "SK", type: dynamodb.AttributeType.STRING },
-      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
-      removalPolicy: RemovalPolicy.DESTROY,
-      stream: dynamodb.StreamViewType.NEW_AND_OLD_IMAGES,
-    });
-    new CfnOutput(this, "TableName", {
-      value: table.tableName,
-    });
-    new CfnOutput(this, "TableArn", {
-      value: table.tableArn,
-    });
+    const table = appTable(this);
   }
 }
