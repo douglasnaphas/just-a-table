@@ -9,6 +9,7 @@ packages = [{include = "just_a_table_boto3"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
+pendulum = "^2.1.2"
 
 
 [build-system]
