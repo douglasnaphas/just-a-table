@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import { App } from "aws-cdk-lib";
-const AWS = require("aws-sdk");
+import { SSMClient, GetParametersCommand } from "@aws-sdk/client-ssm";
 const crypto = require("crypto");
 import { AppStack, AppStackProps } from "../lib";
 const stackname = require("@cdk-turnkey/stackname");
@@ -30,22 +30,18 @@ const STACKNAME_HASH_LENGTH = 6;
     Names: configParams.map((c) => c.ssmParamName()),
     WithDecryption: true,
   };
-  AWS.config.update({ region: process.env.AWS_DEFAULT_REGION });
-  const ssm = new AWS.SSM();
+  const ssmClient = new SSMClient({region: process.env.AWS_DEFAULT_REGION});
+  const getParametersCommand = new GetParametersCommand(ssmParams);
   let ssmResponse: any;
-  ssmResponse = await new Promise((resolve, reject) => {
-    ssm.getParameters(ssmParams, (err: any, data: any) => {
-      resolve({ err, data });
-    });
-  });
-  if (!ssmResponse.data) {
+  ssmResponse = await ssmClient.send(getParametersCommand);
+  if (ssmResponse.$metadata.httpStatusCode !== 200) {
     console.log("error: unsuccessful SSM getParameters call, failing");
     console.log(ssmResponse);
     process.exit(1);
   }
   const ssmParameterData: any = {};
   let valueHash;
-  ssmResponse?.data?.Parameters?.forEach(
+  ssmResponse?.Parameters?.forEach(
     (p: { Name: string; Value: string }) => {
       console.log("Received parameter named:");
       console.log(p.Name);
