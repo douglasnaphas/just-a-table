@@ -1,0 +1,15 @@
+{
+  "name": "just-a-table",
+  "version": "1.0.0",
+  "description": "Interact with AWS resources include a DynamoDB table with the JS SDK",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/douglasnaphas/just-a-table"
+  },
+  "author": "Douglas Naphas <douglasnaphas@gmail.com>",
+  "license": "Apache-2.0"
+}
