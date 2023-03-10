@@ -50,5 +50,9 @@ let describeStacksOutput;
     console.error("Failed to describe stack");
     console.error(error);
   }
-  console.log(describeStacksOutput);
+  tableName = describeStacksOutput.Stacks[0].Outputs.find(
+    (o) => o.OutputKey === "TableName"
+  ).OutputValue;
+  console.log(tableName);
+  
 })();
