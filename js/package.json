@@ -11,5 +11,11 @@
     "url": "git://github.com/douglasnaphas/just-a-table"
   },
   "author": "Douglas Naphas <douglasnaphas@gmail.com>",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@aws-sdk/client-cloudformation": "^3.289.0",
+    "@aws-sdk/client-dynamodb": "^3.288.0",
+    "@aws-sdk/lib-dynamodb": "^3.288.0",
+    "@cdk-turnkey/stackname": "^2.1.0"
+  }
 }
