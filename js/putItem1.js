@@ -2,7 +2,7 @@ const {
   CloudFormationClient,
   DescribeStacksCommand,
 } = require("@aws-sdk/client-cloudformation");
-const { DynamoDBDocumentClient } = require("@aws-sdk/lib-dynamodb");
+const { DynamoDBDocumentClient, PutCommand } = require("@aws-sdk/lib-dynamodb");
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const stackname = require("@cdk-turnkey/stackname");
 
@@ -49,10 +49,40 @@ let describeStacksOutput;
   } catch (error) {
     console.error("Failed to describe stack");
     console.error(error);
+    const ARBITRARY_NONZERO_NUMBER = 4;
+    process.exit(ARBITRARY_NONZERO_NUMBER);
   }
   tableName = describeStacksOutput.Stacks[0].Outputs.find(
     (o) => o.OutputKey === "TableName"
   ).OutputValue;
   console.log(tableName);
-  
+
+  // put item
+  const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  let gameCode = "";
+  const GAME_CODE_LENGTH = 1;
+  while (gameCode.length < GAME_CODE_LENGTH) {
+    gameCode += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+  }
+  const putTime = new Date().toString();
+  const putParams = {
+    TableName: tableName,
+    Item: {
+      PK: gameCode,
+      SK: "game-code",
+      dateTime: putTime,
+    },
+    ConditionExpression: "attribute_not_exists(PK)",
+  };
+  let putResponse;
+  console.log(`about to put gameCode ${gameCode}`);
+  try {
+    putResponse = await ddbDocClient.send(new PutCommand(putParams));
+    console.log(`successfully wrote gameCode ${gameCode} at ${putTime}`);
+  } catch (error) {
+    console.error("Failed to put item");
+    console.error(error);
+    const ARBITRARY_NONZERO_NUMBER = 5;
+    process.exit(ARBITRARY_NONZERO_NUMBER);
+  }
 })();
