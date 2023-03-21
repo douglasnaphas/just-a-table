@@ -109,16 +109,17 @@ let describeStacksOutput;
     process.exit(ARBITRARY_NONZERO_NUMBER);
   }
 
-  // Append to the end of a new list with SET and list_append
+  // Create a new list with SET
   const addToListParams1 = {
     TableName: tableName,
     Key: {
       PK: gameCode,
       SK: "game-code",
     },
-    UpdateExpression: "SET #lt = list_append(#lt, :s)",
+    UpdateExpression: "SET #lt = :nl",
     ExpressionAttributeNames: { "#lt": "ListThings" },
-    ExpressionAttributeValues: { ":s": ["some-string-number-1"] },
+    ExpressionAttributeValues: { ":nl": ["some-string-number-1"] },
+    ConditionExpression: "attribute_not_exists(#lt)",
     ReturnValues: "ALL_NEW",
   };
   try {
