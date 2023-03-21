@@ -2,7 +2,12 @@ const {
   CloudFormationClient,
   DescribeStacksCommand,
 } = require("@aws-sdk/client-cloudformation");
-const { DynamoDBDocumentClient, PutCommand } = require("@aws-sdk/lib-dynamodb");
+const {
+  DynamoDBDocumentClient,
+  PutCommand,
+  GetCommand,
+  UpdateCommand,
+} = require("@aws-sdk/lib-dynamodb");
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const stackname = require("@cdk-turnkey/stackname");
 
@@ -60,7 +65,7 @@ let describeStacksOutput;
   // put item
   const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   let gameCode = "";
-  const GAME_CODE_LENGTH = 1;
+  const GAME_CODE_LENGTH = 12;
   while (gameCode.length < GAME_CODE_LENGTH) {
     gameCode += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
   }
@@ -74,15 +79,58 @@ let describeStacksOutput;
     },
     ConditionExpression: "attribute_not_exists(PK)",
   };
-  let putResponse;
   console.log(`about to put gameCode ${gameCode}`);
   try {
-    putResponse = await ddbDocClient.send(new PutCommand(putParams));
+    const putResponse = await ddbDocClient.send(new PutCommand(putParams));
     console.log(`successfully wrote gameCode ${gameCode} at ${putTime}`);
   } catch (error) {
     console.error("Failed to put item");
     console.error(error);
     const ARBITRARY_NONZERO_NUMBER = 5;
+    process.exit(ARBITRARY_NONZERO_NUMBER);
+  }
+
+  // Get the item we just put
+  const getParams = {
+    TableName: tableName,
+    Key: {
+      PK: gameCode,
+      SK: "game-code",
+    },
+  };
+  try {
+    const getResponse = await ddbDocClient.send(new GetCommand(getParams));
+    console.log("got item, item:");
+    console.log(getResponse.Item);
+  } catch (error) {
+    console.error("Failed to get item, error:");
+    console.error(error);
+    const ARBITRARY_NONZERO_NUMBER = 7;
+    process.exit(ARBITRARY_NONZERO_NUMBER);
+  }
+
+  // Append to the end of a new list with SET and list_append
+  const addToListParams1 = {
+    TableName: tableName,
+    Key: {
+      PK: gameCode,
+      SK: "game-code",
+    },
+    UpdateExpression: "SET #lt = list_append(#lt, :s)",
+    ExpressionAttributeNames: { "#lt": "ListThings" },
+    ExpressionAttributeValues: { ":s": ["some-string-number-1"] },
+    ReturnValues: "ALL_NEW",
+  };
+  try {
+    const updateResponse = await ddbDocClient.send(
+      new UpdateCommand(addToListParams1)
+    );
+    console.log("updated item, response:");
+    console.log(updateResponse);
+  } catch (error) {
+    console.error("Failed to update item, error:");
+    console.error(error);
+    const ARBITRARY_NONZERO_NUMBER = 9;
     process.exit(ARBITRARY_NONZERO_NUMBER);
   }
 })();
