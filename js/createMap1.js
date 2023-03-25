@@ -115,6 +115,28 @@ let describeStacksOutput;
   }
 
   // update the map with a new entry
+  const addNewEntryParams = {
+    TableName: tableName,
+    Key: {
+      PK: gameCode,
+      SK: "game",
+    },
+    UpdateExpression: "SET #mk = :mv",
+    ExpressionAttributeNames: { "#mk": `SomeMap["5"]` },
+    ExpressionAttributeValues: { ":mv": "string five" },
+    ReturnValues: "ALL_NEW",
+  };
+  try {
+    const addNewEntryResponse = await ddbDocClient.send(
+      new UpdateCommand(addNewEntryParams)
+    );
+    console.log("added entry to map");
+  } catch (error) {
+    console.error("Failed to add entry to map, error:");
+    console.error(error);
+    const ARBITRARY_NONZERO_NUMBER = 23;
+    process.exit(ARBITRARY_NONZERO_NUMBER);
+  }
 
   // update an existing entry in the map
 
