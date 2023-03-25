@@ -121,8 +121,8 @@ let describeStacksOutput;
       PK: gameCode,
       SK: "game",
     },
-    UpdateExpression: "SET #mk = :mv",
-    ExpressionAttributeNames: { "#mk": `SomeMap["5"]` },
+    UpdateExpression: "SET #mn.#mk = :mv",
+    ExpressionAttributeNames: { "#mn": `SomeMap`, "#mk": "5" },
     ExpressionAttributeValues: { ":mv": "string five" },
     ReturnValues: "ALL_NEW",
   };
