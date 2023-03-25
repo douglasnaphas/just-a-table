@@ -138,6 +138,30 @@ let describeStacksOutput;
     process.exit(ARBITRARY_NONZERO_NUMBER);
   }
 
+  // add another map property, leaving the existing map prop unchanged
+  const addAnotherEntryParams = {
+    TableName: tableName,
+    Key: {
+      PK: gameCode,
+      SK: "game",
+    },
+    UpdateExpression: "SET #mn.#mk = :mv",
+    ExpressionAttributeNames: { "#mn": `SomeMap`, "#mk": "12" },
+    ExpressionAttributeValues: { ":mv": "string twelve" },
+    ReturnValues: "ALL_NEW",
+  };
+  try {
+    const addAnotherEntryResponse = await ddbDocClient.send(
+      new UpdateCommand(addAnotherEntryParams)
+    );
+    console.log("added another entry to map");
+  } catch (error) {
+    console.error("Failed to add entry to map, error:");
+    console.error(error);
+    const ARBITRARY_NONZERO_NUMBER = 25;
+    process.exit(ARBITRARY_NONZERO_NUMBER);
+  }
+
   // update an existing entry in the map
 
   // get the item
