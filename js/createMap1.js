@@ -145,9 +145,13 @@ let describeStacksOutput;
       PK: gameCode,
       SK: "game",
     },
-    UpdateExpression: "SET #mn.#mk = :mv",
-    ExpressionAttributeNames: { "#mn": `SomeMap`, "#mk": "12" },
-    ExpressionAttributeValues: { ":mv": "string twelve" },
+    UpdateExpression: "SET #mn.#mk = :mv, #op = :ov",
+    ExpressionAttributeNames: {
+      "#mn": `SomeMap`,
+      "#mk": "12",
+      "#op": "OtherProp",
+    },
+    ExpressionAttributeValues: { ":mv": "string twelve", ":ov": "other value" },
     ReturnValues: "ALL_NEW",
   };
   try {
