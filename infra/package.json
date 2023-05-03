@@ -29,6 +29,6 @@
     "@cdk-turnkey/stackname": "^2.1.0",
     "aws-cdk-lib": "^2.77.0",
     "bufferutil": "^4.0.7",
-    "utf-8-validate": "^5.0.5"
+    "utf-8-validate": "^6.0.3"
   }
 }
