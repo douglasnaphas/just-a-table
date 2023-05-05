@@ -1,9 +1,9 @@
 {
-  "name": "just-a-bucket",
+  "name": "just-a-table",
   "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "git://github.com/cdk-turnkey/just-a-bucket"
+    "url": "git://github.com/douglasnaphas/just-a-table"
   },
   "license": "Apache-2.0",
   "scripts": {
