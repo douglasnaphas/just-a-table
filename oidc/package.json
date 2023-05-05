@@ -8,8 +8,7 @@
     "build": "tsc",
     "watch": "tsc -w",
     "test": "jest",
-    "cdk": "cdk",
-    "say-var": "bash say-var.sh"
+    "cdk": "cdk"
   },
   "devDependencies": {
     "@types/jest": "^29.2.5",
