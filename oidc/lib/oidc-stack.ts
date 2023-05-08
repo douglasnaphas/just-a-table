@@ -5,7 +5,7 @@ import { GithubActionsIdentityProvider, GithubActionsRole } from 'aws-cdk-github
 import * as iam from 'aws-cdk-lib/aws-iam'
 
 export class OidcStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: cdk.App, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
     const provider = new GithubActionsIdentityProvider(scope, 'GithubProvider');
     const deployRole = new GithubActionsRole(scope, 'DeployRole', {
