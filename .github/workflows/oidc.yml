@@ -6,6 +6,7 @@ jobs:
   account-check-dev:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Identify dev account and region
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.DEV_AWS_ACCESS_KEY_ID }}
@@ -19,6 +20,7 @@ jobs:
   account-check-test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v2
       - name: Identify dev account and region
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.TEST_AWS_ACCESS_KEY_ID }}
@@ -33,8 +35,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [account-check-dev, account-check-test]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       - name: Install
         working-directory: oidc
         run: |
