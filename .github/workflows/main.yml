@@ -16,7 +16,7 @@ jobs:
         run: |
           aws sts get-caller-identity
           echo ${AWS_DEFAULT_REGION} | sed 's/-/+/g'
-  build:
+  test-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
