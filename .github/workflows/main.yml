@@ -16,7 +16,23 @@ jobs:
         run: |
           aws sts get-caller-identity
           echo ${AWS_DEFAULT_REGION} | sed 's/-/+/g'
-  test-deploy:
+  test-oidc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install
+        working-directory: oidc
+        run: |
+          npm install
+      - name: Build
+        working-directory: oidc
+        run: |
+          npm run build
+      - name: Test
+        working-directory: oidc
+        run: |
+          npm test
+  test-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
