@@ -4,10 +4,11 @@ if [[ \
   -z "${AWS_SECRET_ACCESS_KEY}" || \
   -z "${AWS_SESSION_TOKEN}" || \
   -z "${AWS_DEFAULT_REGION}" || \
-  -z "${EXPECTED_ACCOUNT_ID}"
+  -z "${EXPECTED_ACCOUNT_ID}" || \
+  -z "${DEPLOY_ROLE_NAME}"
 ]]
 then
-  echo "Missing required environment variable. AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN, AWS_DEFAULT_REGION, and EXPECTED_ACCOUNT_ID are required."
+  echo "Missing required environment variable. AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_SESSION_TOKEN, AWS_DEFAULT_REGION EXPECTED_ACCOUNT_ID, and DEPLOY_ROLE_NAME are required."
   exit 2
 fi
 CALLER_IDENTITY=$(aws sts get-caller-identity)
