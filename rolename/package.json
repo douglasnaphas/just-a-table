@@ -1,0 +1,13 @@
+{
+  "name": "rolename",
+  "version": "0.1.0",
+  "description": "Compute a name for an AWS IAM role.",
+  "bin": {"rolename": "./index.js"},
+  "main": "index.js",
+  "files": ["index.js"],
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Douglas Naphas <douglasnaphas@gmail.com>",
+  "license": "Apache-2.0"
+}
