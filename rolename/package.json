@@ -2,7 +2,11 @@
   "name": "rolename",
   "version": "0.1.0",
   "description": "Compute a name for an AWS IAM role.",
-  "bin": {"rolename": "./index.js"},
+  "bin": {
+    "rolename": "./index.js",
+    "rolename2": "./rolename2.js",
+    "r3": "./rolename3.js"
+  },
   "main": "index.js",
   "files": ["index.js"],
   "scripts": {
