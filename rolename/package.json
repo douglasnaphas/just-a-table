@@ -5,13 +5,25 @@
   "bin": {
     "rolename": "./index.js",
     "rolename2": "./rolename2.js",
-    "r3": "./rolename3.js"
+    "r3": "./rolename3.js",
+    "r4": "./rolename4.js"
   },
   "main": "index.js",
-  "files": ["index.js"],
+  "files": [
+    "index.js",
+    "rolename2.js",
+    "rolename3.js",
+    "rolename4.js"
+  ],
   "scripts": {
+    "build": "tsc",
     "test": "jest"
   },
   "author": "Douglas Naphas <douglasnaphas@gmail.com>",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "dependencies": {
+    "@types/node": "^20.1.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  }
 }
