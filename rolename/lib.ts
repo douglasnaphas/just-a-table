@@ -1,3 +1,3 @@
 export function roleName() {
-    return "lib/roleName";
+  return "lib/roleName";
 }
