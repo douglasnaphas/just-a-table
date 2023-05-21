@@ -3,13 +3,15 @@
   "version": "0.1.0",
   "description": "Compute a name for an AWS IAM role.",
   "bin": {
-    "rolename": "./index.js",
+    "rolename": "./bin.js",
     "rolename2": "./rolename2.js",
     "r3": "./rolename3.js",
     "r4": "./rolename4.js"
   },
-  "main": "index.js",
+  "main": "lib.js",
   "files": [
+    "bin.js",
+    "lib.js",
     "index.js",
     "rolename2.js",
     "rolename3.js",
