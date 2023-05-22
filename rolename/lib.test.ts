@@ -12,6 +12,13 @@ describe("rolename", () => {
       hashLength: 6,
       expected: "GitHubDeployer-73ac48",
     },
+    {
+      repoOwner: "ff",
+      repoName: "douglasnaphas",
+      prefix: "MyRole_",
+      hashLength: 8,
+      expected: "MyRole_8f1c17d6",
+    }
   ])(
     "$repoOwner / $repoName ($hashLength) -> $expected",
     ({ repoOwner, repoName, prefix, hashLength, expected }) => {
@@ -45,6 +52,10 @@ describe("just figuring out hashes", () => {
       expected:
         "73ac48d6ad0450fbf1888bdb6675cb2fe917f706214dab5663cd69fcc743d080",
     },
+    {
+      stringToHash: "05a9bf223fedf80a9d0da5f73f5c191a665bf4a0a4a3e608f2f9e7d5ff23959c" + "99b8db41da150a46afb435b9c2cbceffe1b3c4dafe93bd1440810e409f78a413",
+      expected: "8f1c17d6f531b3b4aae505062c91bdf684016fa09a79abbdd1d210b64dc0a85f"
+    }
   ])("hashing $stringToHash", ({ stringToHash, expected }) => {
     expect(sha256(stringToHash)).toEqual(expected);
   });
