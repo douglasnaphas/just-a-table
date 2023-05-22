@@ -2,7 +2,7 @@ name: CI
 concurrency: ci-${{ github.ref }}
 on:
   push:
-    branches: [master]
+    branches: [master, main]
   workflow_dispatch:
 jobs:
   id-account:
@@ -16,6 +16,26 @@ jobs:
         run: |
           aws sts get-caller-identity
           echo ${AWS_DEFAULT_REGION} | sed 's/-/+/g'
+  test-rolename:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install
+        working-directory: rolename
+        run: |
+          npm install
+      - name: Build
+        working-directory: rolename
+        run: |
+          npm run build
+      - name: Test
+        working-directory: rolename
+        run: |
+          npm test
+      - name: itest
+        working-directory: rolename
+        run: |
+          npm run itest
   test-oidc:
     runs-on: ubuntu-latest
     steps:
