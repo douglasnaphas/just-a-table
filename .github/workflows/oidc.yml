@@ -2,6 +2,11 @@ name: set-up-oidc
 concurrency: ci-${{ github.ref }}
 on:
   workflow_dispatch:
+    inputs:
+      # trying to see if evidence of the inputs is left anywyere, so I know
+      # whether I should use them for secrets
+      greeting:
+        required: true
 jobs:
   account-check-dev:
     runs-on: ubuntu-latest
