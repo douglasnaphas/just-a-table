@@ -13,9 +13,12 @@ jobs:
           AWS_ACCESS_KEY_ID: ${{ secrets.TEST_AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.TEST_AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: "us-east-1"
+          DEV_AWS_ACCOUNT_ID: ${{ vars.DEV_AWS_ACCOUNT_ID }}
         run: |
           aws sts get-caller-identity
           echo ${AWS_DEFAULT_REGION} | sed 's/-/+/g'
+          echo ${DEV_AWS_ACCOUNT_ID}
+          echo ${DEV_AWS_ACCOUNT_ID:0:4}          
   test-rolename:
     runs-on: ubuntu-latest
     steps:
